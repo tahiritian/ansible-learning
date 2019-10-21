@@ -1,0 +1,2 @@
+set system login user adentech uid 2008
+set system login user adentech class super-user

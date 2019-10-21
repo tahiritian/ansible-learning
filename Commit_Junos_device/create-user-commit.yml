@@ -1,0 +1,30 @@
+---
+- name: Commit
+  hosts: juniper
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+  vars_prompt:
+    - name: ADMUSER
+      prompt: Username
+      private: no
+    - name: ADMPASS
+      prompt: password
+      private: yes
+  tasks:
+    - name: push two set commands to config
+      junos_install_config:
+        host: "{{ inventory_hostname }}"
+        user: "{{ ADMUSER }}"
+        passwd: "{{ ADMPASS }}"
+        replace: no
+        overwrite: no
+        confirm: 2
+        file: /etc/ansible/cmds-files/newUser.set
+    - name: Confirm the commit
+      junos_commit:
+        host: "{{ inventory_hostname }}"
+        user: "{{ ADMUSER }}"
+        passwd: "{{ ADMPASS }}"
+        comment: "commit confirmed"
