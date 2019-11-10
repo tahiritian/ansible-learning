@@ -1,0 +1,25 @@
+- name: Build and deploy common configuration
+  hosts: qfx
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+  tasks:
+  
+    - name: remove junos config file for each device
+      file: path=common_config/{{inventory_hostname}}.conf state=absent
+
+    - name: create common_config directory
+      file: path=common_config/ state=directory
+    
+    - name: Build configuration
+      template: src=configure_common_settings_template.j2 dest=common_config/{{ inventory_hostname }}.conf
+
+    - name: Deploy config to device ... please wait
+      junos_install_config:
+        host={{ ip }}   
+        user=root
+        passwd=butthead1
+        comment="common config configured by ansible"
+        file=common_config/{{ inventory_hostname }}.conf
+        logfile=changes.log

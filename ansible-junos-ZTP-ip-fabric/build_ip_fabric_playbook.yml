@@ -1,0 +1,26 @@
+- name: Build and deploy ipfabric configuration
+  hosts: qfx
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+  tasks:
+  
+    - name: remove junos config file for each device
+      file: path=ipfabric_config/{{inventory_hostname}}.conf state=absent
+
+    - name: create ipfabric_config directory
+      file: path=ipfabric_config/ state=directory
+    
+    - name: Build configuration
+      template: src=build_ip_fabric_template.j2 dest=ipfabric_config/{{ inventory_hostname }}.conf
+
+    - name: Deploy config to device ... please wait
+      junos_install_config:
+        host={{ ip }}
+        user=root
+        passwd={{ root_password_clear }}
+        comment="configured by ansible"
+        file=ipfabric_config/{{ inventory_hostname }}.conf
+        logfile=changes.log
+

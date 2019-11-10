@@ -1,0 +1,32 @@
+---
+ - name: create initial junos configuration from a template and push it from console port
+   hosts: leaf2
+   connection: local
+   gather_facts: no
+   roles:
+    - Juniper.junos
+   
+   vars_prompt:
+    - name: DEVICE_PASSWORD
+      prompt: Device password
+      private: yes
+
+
+   tasks:
+    - name: remove intial junos config file for each device
+      file: path=initial_conf_to_push_from_console/{{inventory_hostname}}.conf state=absent
+      
+    - name: create initial_conf_to_push_from_console directory
+      file: path=initial_conf_to_push_from_console/ state=directory
+
+    - name: Render initial configuration
+      template: src=create_initial_junos_conf_template.j2 dest=initial_conf_to_push_from_console/{{ inventory_hostname }}.conf
+
+    - name: push config from console port
+      junos_install_config:
+       host={{ inventory_hostname }}
+       user=root
+       passwd={{ DEVICE_PASSWORD }}
+       console="--telnet=127.0.0.1,8231"
+       file=initial_conf_to_push_from_console/{{ inventory_hostname }}.conf
+       overwrite=yes

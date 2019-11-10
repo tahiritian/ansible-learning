@@ -1,0 +1,24 @@
+---
+ - name: junos_shutdown
+   hosts: qfx
+   roles:       
+    - Juniper.junos
+   connection: local
+   gather_facts: no
+
+   vars_prompt:
+    - name: DEVICE_PASSWORD
+      prompt: Device password
+      private: yes
+    
+   tasks:
+
+   - name: shutdown junos devices
+     junos_shutdown:
+      host={{ ip }}
+      user=root
+      passwd={{ DEVICE_PASSWORD }}
+      shutdown="shutdown"
+      #reboot=yes
+
+

@@ -1,0 +1,15 @@
+---
+root_password: $1$fkm7JNFi$nXXGg.I4jrhpJnR9S0T4o0
+root_password_clear: butthead1
+login_message: This is your banner
+time_zone: America/Los_Angeles
+name_servers:
+- 8.8.8.8
+- 4.2.2.2
+- 4.2.2.1 
+ntp_servers:
+- 172.17.28.5
+snmp:
+ location: DC1
+ contact: team4@juniper.net
+

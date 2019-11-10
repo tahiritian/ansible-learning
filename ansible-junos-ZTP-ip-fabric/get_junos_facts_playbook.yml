@@ -1,0 +1,36 @@
+---
+ - name: Get Facts
+   hosts: qfx
+   roles:       
+    - Juniper.junos
+   connection: local
+   gather_facts: no
+
+   vars_prompt:
+    - name: DEVICE_PASSWORD
+      prompt: Device password
+      private: yes
+    
+   tasks:
+   
+    - name: remove facts for each device
+      file: path=inventory/{{inventory_hostname}}.conf state=absent
+    
+    - name: create inventory directory
+      file: path=inventory state=directory
+      
+    - name: Retrieve information from devices running Junos
+      junos_get_facts:
+       host={{ ip }} 
+       user=root
+       passwd={{ DEVICE_PASSWORD }}
+       savedir=inventory
+      register: junos
+
+    - name: Print some facts
+      debug: msg="device {{junos["facts"]["hostname"]}} runs version {{junos.facts.version}}" 
+      when: junos.facts.version != "12.3R11.2"
+ 
+          
+
+

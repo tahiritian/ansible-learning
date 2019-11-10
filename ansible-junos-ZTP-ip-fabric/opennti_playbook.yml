@@ -1,0 +1,17 @@
+---
+ - name: install conf
+   hosts: qfx
+   roles:
+    - Juniper.junos
+   connection: local
+   gather_facts: no
+
+   tasks:
+
+   - name: Install junos conf to send commit events to opennti 
+     junos_install_config:
+      host={{ ip }}
+      user=root
+      passwd=butthead1
+      file=opennti.set
+      comment="configured by ansible"

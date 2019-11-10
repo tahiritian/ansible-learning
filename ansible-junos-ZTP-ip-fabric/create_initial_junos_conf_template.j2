@@ -1,0 +1,28 @@
+system {
+    host-name {{ inventory_hostname }};
+    root-authentication {
+        encrypted-password {{ root_password }}; 
+    }
+    services {
+        ssh;
+        netconf {
+            ssh;
+        }
+    }
+}    
+interfaces {
+   em0 {
+        unit 0 {
+            family inet {
+                address {{ ip }}/{{ mask }};
+            }
+        }
+    }
+}
+routing-options {
+    static {
+        route 0.0.0.0/0 next-hop {{ defaultgateway }};
+    }
+}
+
+

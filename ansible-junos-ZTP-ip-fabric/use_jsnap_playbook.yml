@@ -1,0 +1,16 @@
+---
+ - name: use jsnap
+   hosts: localhost
+   connection: local
+
+   tasks:
+
+   - name: use jsnap
+     command: /home/lab/jsnap/run_jsnap
+     #command: ls
+     register: jsnap
+
+   - debug: msg={{ item }}
+     with_items: somevar.splitlines()
+   
+

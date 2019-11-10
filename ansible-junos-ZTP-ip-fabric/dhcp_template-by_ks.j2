@@ -1,0 +1,6 @@
+host {{ host_name }} {
+        hardware ethernet {{ mac }}; #{{host_name}}
+        option NEW_OP.transfer-mode "ftp"; #{{host_name}}
+        option option-150 10.4.0.1; #ftp server {{host_name}}
+        option NEW_OP.config-file-name "/{{host_name}}.conf";} #{{host_name}}
+

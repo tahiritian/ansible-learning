@@ -1,0 +1,3 @@
+---
+- include: configure_common_settings_playbook.yml
+- include: build_ip_fabricv2_playbook.yml

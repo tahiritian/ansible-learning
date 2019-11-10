@@ -1,0 +1,16 @@
+---
+ - name: create initial junos configuration from a template
+   hosts: qfx
+   connection: local
+   gather_facts: no
+
+
+   tasks:
+    - name: remove intial junos config file for each device
+      file: path=initial_conf/{{inventory_hostname}}.conf state=absent
+      
+    - name: create initial_conf directory
+      file: path=initial_conf/ state=directory
+
+    - name: Render initial configuration
+      template: src=create_initial_junos_conf_template.j2 dest=initial_conf/{{ inventory_hostname }}.conf

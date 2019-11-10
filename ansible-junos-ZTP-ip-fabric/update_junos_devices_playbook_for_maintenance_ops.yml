@@ -1,0 +1,45 @@
+---
+ - name: Install_os
+   hosts: '{{ hosts }}'
+   roles:       
+    - Juniper.junos
+   connection: local
+   gather_facts: no
+    
+   tasks:
+   
+   - name: Build junos configuration
+     template: src=maintenance_window.j2 dest=junos_files_to_install/maintenance_window.set
+
+   - name: Install configuration to devices running Junos
+     junos_install_config:
+      host={{ ip }}
+      user=root
+      passwd=butthead1
+      file={{ item }}
+     with_items:
+      - junos_files_to_install/maintenance_window.set
+      
+   - name: create upgrade_junos_log directory
+     file: path=upgrade_junos_log state=directory
+     
+   - name: create junos_images directory
+     file: path=/home/lab/junos_images state=directory
+
+   - pause: seconds=10
+   
+  # - name: junos_install_os
+  #   junos_install_os:
+  #   host={{ ip }}
+  #    user=root
+  #    passwd=butthead1
+  #   version=15.1-20160324_x151X53.0
+  #    package=/home/lab/junos_images/jinstall-vqfx-10-f-15.1-20160324_x151X53.0-domestic.img
+
+   - name: shutdown junos devices
+     junos_shutdown:
+      host={{ ip }}
+      user=root
+      passwd=butthead1
+      shutdown="shutdown"
+      reboot=yes

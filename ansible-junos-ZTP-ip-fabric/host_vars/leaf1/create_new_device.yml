@@ -1,0 +1,6 @@
+--- 
+host_name: leaf1
+ip: 10.4.0.101
+mask: 24 
+defaultgateway: 10.4.0.1
+mac: 00:01:21:01:22:00

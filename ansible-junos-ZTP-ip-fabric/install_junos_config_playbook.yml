@@ -1,0 +1,30 @@
+---
+ - name: install conf
+   hosts: spine1
+   roles:
+    - Juniper.junos
+   connection: local
+   gather_facts: no
+
+   vars_prompt:
+    - name: DEVICE_PASSWORD
+      prompt: Device password
+      private: yes
+
+   tasks:
+
+   - name: create inventory directory
+     file: path=pdiff state=directory
+
+   - name: Install configuration to devices running Junos
+     junos_install_config:
+      host={{ ip }}
+      user=root
+      passwd={{ DEVICE_PASSWORD }}
+      logfile=pdiff/install_config.log
+      file={{ item }}
+      comment="configured by ansible"
+      diffs_file=pdiff/{{ inventory_hostname }}_{{ lookup('pipe', 'date +%m%d-%H%M%S') }}
+     with_items:
+      - junos_files_to_install/syslog.set
+      - junos_files_to_install/banner.set

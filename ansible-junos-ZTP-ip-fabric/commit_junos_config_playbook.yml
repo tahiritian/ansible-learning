@@ -1,0 +1,24 @@
+---
+#use case is for confirming a commit confirm
+ - name: junos_commit
+   hosts: qfx
+   roles:       
+    - Juniper.junos
+   connection: local
+   gather_facts: no
+
+   vars_prompt:
+    - name: DEVICE_PASSWORD
+      prompt: Device password
+      private: yes
+    
+   tasks:
+
+   - name: non_load_junos_commit
+     junos_commit:
+      host= {{ ip }}
+      user=root
+      passwd={{ DEVICE_PASSWORD }}
+      comment="non_load_commit"
+      logfile=commit_playbook_change.log
+

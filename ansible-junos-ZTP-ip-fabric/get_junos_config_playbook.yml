@@ -1,0 +1,30 @@
+---
+ - name: Get conf
+   hosts: qfx
+   roles:
+    - Juniper.junos
+   connection: local
+   gather_facts: no
+   vars_prompt:
+    - name: DEVICE_PASSWORD
+      prompt: Device password
+      private: yes
+
+   tasks:
+
+    - name: remove configs directory for each device
+      file: path=configs/{{inventory_hostname}}.conf state=absent
+
+    - name: create configs directory
+      file: path=configs/ state=directory
+
+
+    - name: Retrieve configuration from devices running Junos
+      junos_get_config:
+       host={{ ip }}
+       user=root
+       passwd={{ DEVICE_PASSWORD }}
+       dest=configs/{{ inventory_hostname }}_{{ lookup('pipe', 'date +%m%d-%H%M%S') }}.conf
+       format=text
+       logfile=configs/get_config.log
+       filter=interfaces

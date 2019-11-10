@@ -1,0 +1,30 @@
+---
+ - name: Install_os
+   hosts: qfx
+   roles:       
+    - Juniper.junos
+   connection: local
+   gather_facts: no
+
+   vars_prompt:
+    - name: DEVICE_PASSWORD
+      prompt: Device password
+      private: yes
+    
+   tasks:
+
+   - name: create upgrade_junos_log directory
+     file: path=upgrade_junos_log state=directory
+     
+   - name: create junos_images directory
+     file: path=/home/lab/junos_images state=directory
+
+   - name: junos_install_os
+     junos_install_os:
+      host={{ ip }}
+      user=root
+      passwd={{ DEVICE_PASSWORD }}
+      version=15.1-20160324_x151X53.0
+      package=/home/lab/junos_images/jinstall-vqfx-10-f-15.1-20160324_x151X53.0-domestic.img
+      logfile=upgrade_junos_log/software.log
+       

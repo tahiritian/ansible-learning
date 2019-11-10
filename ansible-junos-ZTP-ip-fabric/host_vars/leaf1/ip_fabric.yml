@@ -1,0 +1,15 @@
+host_name: leaf1
+loopback: 100.100.30.1
+local_asn: 65301
+local_ip: 10.40.1.1
+neighbors:
+   - interface: em3
+     name: to spine1
+     asn: 65201
+     peer_ip: 192.168.10.0
+     local_ip: 192.168.10.1
+   - interface: em4
+     name: to spine2
+     asn: 65202
+     peer_ip: 192.168.11.0
+     local_ip: 192.168.11.1

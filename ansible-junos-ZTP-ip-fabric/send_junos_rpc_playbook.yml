@@ -1,0 +1,20 @@
+---
+ - name: pass rpc
+   hosts: qfx
+   roles:
+    - Juniper.junos
+   connection: local
+   gather_facts: no
+
+   tasks:
+   
+   - name: create rpc_output directory
+     file: path=rpc_output state=directory 
+
+   - name: Get interface information
+     junos_rpc:
+        host={{ ip }}
+        user=root
+        passwd=butthead1
+        rpc=get-interface-information
+        dest=rpc_output/{{inventory_hostname}}_get_interface_information.conf

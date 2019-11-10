@@ -1,0 +1,7 @@
+--- 
+host_name: spine2
+ip: 10.4.0.12
+mask: 24 
+defaultgateway: 10.4.0.1
+mac: 00:01:12:21:22:00
+

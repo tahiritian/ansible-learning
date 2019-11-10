@@ -1,0 +1,27 @@
+
+---
+ - name: pass a cli on junos devices
+   hosts: qfx
+   roles:
+    - Juniper.junos
+   connection: local
+   gather_facts: no
+   vars_prompt:
+    - name: DEVICE_PASSWORD
+      prompt: Device password
+      private: yes      
+
+
+   tasks:
+
+    - name: create inventory directory
+      file: path=cli_output state=directory
+
+    - name: junos cli
+      junos_cli:
+       host={{ ip }}
+       user=root
+       passwd={{ DEVICE_PASSWORD }}
+       cli="show chassis hardware"
+       logfile=cli_output/cli.log
+       dest=cli_output/{{ inventory_hostname }}.txt

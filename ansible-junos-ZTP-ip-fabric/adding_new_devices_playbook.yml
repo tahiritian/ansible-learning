@@ -1,0 +1,39 @@
+---
+ - name: create initial junos configuration from a template r 
+   hosts: qfx
+   connection: local
+   gather_facts: no
+
+   tasks:
+
+    - name: Render initial junos configuration
+      template: src=create_initial_junos_conf_template.j2 dest=/srv/ftp/{{ inventory_hostname }}.conf
+
+    - name: remove previous dhcp_tmp directory content
+      file: path=dhcp_tmp state=absent
+
+    - name: create dhcp_tmp directory
+      file: path=dhcp_tmp state=directory
+
+    - name: Render new dhcp details
+      template: src=dhcp_template.j2 dest=dhcp_tmp/dhcpd_{{ inventory_hostname }}.conf
+
+ - name: update the FTP and DHCP servers 
+   hosts: localhost
+   gather_facts: no
+ 
+   tasks:
+
+    - name: copy dhcp conf file into another place and rename it
+      copy: src=/etc/dhcp/dhcpd.conf dest=/home/lab/automation-summit/dhcp_tmp/dhcp_old.conf
+
+    - name: Assembling dhcp configurations
+      assemble: src=dhcp_tmp dest=dhcp_tmp/dhcpd.conf
+
+
+    - name: update dhcpd file
+      copy: src=/home/lab/automation-summit/dhcp_tmp/dhcpd.conf dest=/etc/dhcp/dhcpd.conf
+
+    - name: restart dhcp service
+      service: name=isc-dhcp-server state=restarted
+      

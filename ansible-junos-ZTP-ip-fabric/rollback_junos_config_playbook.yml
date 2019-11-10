@@ -1,0 +1,27 @@
+---
+ - name: Rollback
+   hosts: qfx
+   roles:       
+    - Juniper.junos
+   connection: local
+   gather_facts: no
+
+   vars_prompt:
+    - name: DEVICE_PASSWORD
+      prompt: Device password
+      private: yes
+
+   tasks:
+
+   - name: create rollback directory
+     file: path=rollback state=directory
+
+   - name: Rollback_junos_config
+     junos_rollback:
+      host={{ ip }}
+      user=root
+      passwd={{ DEVICE_PASSWORD }}
+      logfile=rollback/rollback.log
+      diffs_file=rollback/{{ inventory_hostname }}_{{ lookup('pipe', 'date +%m%d-%H%M%S') }}.diff
+      rollback=1
+      comment="Rolled back by Ansible"
