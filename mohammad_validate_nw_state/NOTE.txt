@@ -1,0 +1,54 @@
+- Install docker
+- Run the docker
+- Pull container (docker pull tahiritian/mohammad_validate_nw_state)
+- Connect the container
+- Create/modify files in "/" directory.
+
+root@devops_openstack:/# docker images
+REPOSITORY                        TAG                          IMAGE ID            CREATED             SIZE
+ubuntu                            mohammad_validate_nw_state   2c58fdc95a56        4 hours ago         785MB
+
+root@devops_openstack:/# docker start mohammad_validate_nw_state
+mohammad_validate_nw_state
+
+root@devops_openstack:/# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+0b25c09ff8b9        ubuntu:latest       "/bin/bash"         4 hours ago         Up 7 seconds                            mohammad_validate_nw_state
+
+root@devops_openstack:/# docker attach 0b25c09ff8b9
+
+---- Auto run .sh file at container start ----
+
+root@0b25c09ff8b9:/# chmod 777 microservice_validate_network_state.sh 
+
+docker run -it --rm -v ${PWD}/inputs/host_vars:/host_vars -v ${PWD}/inputs:/inputs -v ${PWD}/outputs:/outputs ksator/validate-network-state
+
+
+
+
+----- Push image from local container to Docker website ----
+
+root@devops_openstack:/# docker login -u "tahiritian" -p "feed627been239" docker.io
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+
+root@devops_openstack:/# docker tag ubuntu:mohammad_validate_nw_state tahiritian/mohammad_validate_nw_state
+root@devops_openstack:/# docker push tahiritian/mohammad_validate_nw_state 
+The push refers to repository [docker.io/tahiritian/mohammad_validate_nw_state]
+4bc98d70a518: Pushed 
+e0b3afb09dc3: Pushed 
+6c01b5a53aac: Pushed 
+2c6ac8e5063e: Pushed 
+cc967c529ced: Pushed 
+latest: digest: sha256:56296123e7a69d58a62e0684d9d13e2ab576597410e92446cb499eefe3725723 size: 1365
+
+
+
+** Docker Pull Command
+docker pull tahiritian/mohammad_validate_nw_state
+
+--------

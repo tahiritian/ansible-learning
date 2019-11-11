@@ -1,0 +1,17 @@
+ - name: Validate Junos devices state 
+   hosts: all
+   connection: local
+   gather_facts: no
+   pre_tasks:
+     - include_vars: "inputs/audit_option.yaml"
+   roles:
+     - Juniper.junos
+     - validate-management-ports-reachability
+     - validate-device-model-and-SW-release
+     - validate-interfaces-status
+     - validate-lldp-neighbors
+     - validate-vlans-configuration
+     - validate-bgp-sessions
+     - validate-ip-reachability-using-ping-from-Junos-device
+     - validate-vtep-endpoints
+
