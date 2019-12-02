@@ -1,0 +1,14 @@
+---
+  - name: Reboot devices running Junos OS
+    hosts: vmx
+    roles:
+      - Juniper.junos
+    connection: local
+    gather_facts: no
+
+    tasks:
+     - name: Reboot all REs on the device
+       juniper_junos_system:
+        action: "reboot"
+        in_min: 1
+
